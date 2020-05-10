@@ -6,6 +6,8 @@ from .serializer import UserSerializer
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
+from rest_framework import permissions
+
 
 
 #api_root
@@ -16,13 +18,19 @@ def api_root(request, format=None):
     })
 
 
-class ListUsers(generics.ListCreateAPIView):
+class CreateUser(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+class ListUsers(generics.ListAPIView):
+    permission_classes = [permissions.IsAdminUser]
     #assign serializer class
     serializer_class = UserSerializer
     #get all users query set
     queryset = User.objects.all()
 
 class UserDetails(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     #assign serializer class
     serializer_class = UserSerializer
     #get all users query set
